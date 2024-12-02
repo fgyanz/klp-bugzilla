@@ -32,13 +32,17 @@ $ ./klp-bugzilla-cli.py
 ## Output
 Once all the bugs have been analyzed, klp-bugzilla spits to stdout a table
 with the full report. Most of the fields are self-explanatory except for perhaps
-the `status` and `affected` ones.
+the `status` and `affected` ones. 
 * status:
-  * `Fixed(n)`: Bug has been fixed in all the vulnerable SLEs. 
+  * `Fixed(n)`: Bug has been fixed in all the vulnerable SLEs.
   * `Incomplete(n)`: Most likely someone is working on the bug.
   * `Not-Fixed`: No one has started working on the bug yet. OR it has been discarded.
 
-`n` is the total number of commits fixing the bug.
+`n` is the total number of commits fixing the bug. 
+
+NOTE: The `status` is derived from the available information in bugzilla, and as such
+it might be incorrect and should be manually verified. That being said, in most cases
+the reported information is realiable enough to be used as a hint.
 
 * affected:
     * `No`: No codestreams were found that required to be livepatched.
