@@ -35,7 +35,9 @@ def fetch_bugs():
     bugs = bzapi.getbugs(ids)
 
     deps_ids = [b.depends_on[0] for b in bugs if len(b.depends_on) > 0]
-    deps = {d.id:d for d in bzapi.getbugs(deps_ids)}
+    deps_fields = ["assigned_to", "whiteboard"]
+    deps = {d.id:d for d in bzapi.getbugs(deps_ids,include_fields=deps_fields)}
+
     return bugs, deps
 
 def check_status(bug, cve, dep):
@@ -95,6 +97,13 @@ def get_dependency(bug, deps):
     d = bug.depends_on
     return deps[d[0]] if len(d) else None
 
+def get_cvss(dep):
+    if dep is None:
+        return "None"
+
+    raw = dep.whiteboard.split(':')
+    return raw[3] if len(raw) >= 4 else "None"
+
 if __name__ == '__main__':
     global bzapi
     table = []
@@ -115,10 +124,11 @@ if __name__ == '__main__':
             cve = summary[1][5:]
             subsystem = summary[3][:40]
             d = get_dependency(b, deps)
+            cvss = get_cvss(d)
             classification = check_classification(b)
 
             job = executor.submit(check_status, b, cve, d)
-            pool[job] = [b.id, cve, subsystem, classification]
+            pool[job] = [b.id, cve, subsystem, cvss, classification]
 
         print(f"[+] Scanning bugs with klp-build. Go for a coffee :)\n")
 
@@ -127,5 +137,5 @@ if __name__ == '__main__':
             bug.extend(job.result())
             table.append(bug)
 
-    print(tabulate(table, headers=["ID", "CVE", "SUBSYSTEM",
+    print(tabulate(table, headers=["ID", "CVE", "SUBSYSTEM", "CVSS",
                                   "CLASSIFICATION", "STATUS", "AFFECTED"]))
