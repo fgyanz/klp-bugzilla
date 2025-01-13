@@ -10,6 +10,7 @@ import os
 import re
 import subprocess
 import time
+import sys
 from tabulate import tabulate
 from bugzilla.exceptions import BugzillaError
 from requests.exceptions import RequestException
@@ -126,9 +127,10 @@ if __name__ == '__main__':
             d = get_dependency(b, deps)
             cvss = get_cvss(d)
             classification = check_classification(b)
+            priority = b.priority[5:]
 
             job = executor.submit(check_status, b, cve, d)
-            pool[job] = [b.id, cve, subsystem, cvss, classification]
+            pool[job] = [b.id, cve, subsystem, cvss, priority, classification]
 
         print(f"[+] Scanning bugs with klp-build. Go for a coffee :)\n")
 
@@ -137,5 +139,5 @@ if __name__ == '__main__':
             bug.extend(job.result())
             table.append(bug)
 
-    print(tabulate(table, headers=["ID", "CVE", "SUBSYSTEM", "CVSS",
+    print(tabulate(table, headers=["ID", "CVE", "SUBSYSTEM", "CVSS", "PRIORITY",
                                   "CLASSIFICATION", "STATUS", "AFFECTED"]))

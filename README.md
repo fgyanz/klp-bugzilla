@@ -20,12 +20,12 @@ $ ./klp-bugzilla-cli.py
 [+] Processing 111 bugs
 [+] Scanning bugs with klp-build. Go for a coffee :)
 
-     ID  CVE         SUBSYSTEM       CVSS    CLASSIFICATION    STATUS         AFFECTED
--------  ----------  ------------  ------    ----------------  -------------  --------------------
-122xxxx  2021-xxxxx  scsi             7.8    complex           Incomplete(0)  No
-122xxxx  2024-xxxxx  drm/amdgpu       7.8    trivial           Fixed(3)       15.6rtu0 15.6u0
-122xxxx  2024-xxxxx  iommu/vt-d       7.8    None              Fixed(1)       15.6rtu0 15.6u0-1
-122xxxx  2024-xxxxx  scsi             7.0    trivial           Fixed(11)      12.5u50-54 15.4u20-26 15.5rtu7-15 15.5u7-14
+     ID  CVE         SUBSYSTEM       CVSS    PRIORITY      CLASSIFICATION    STATUS         AFFECTED
+-------  ----------  ------------  ------   ----------   ----------------  -------------  --------------------
+122xxxx  2021-xxxxx  scsi             7.8    Medium         complex          Incomplete(0)  No
+122xxxx  2024-xxxxx  drm/amdgpu       7.8    Medium         trivial          Fixed(3)       15.6rtu0 15.6u0
+122xxxx  2024-xxxxx  iommu/vt-d       7.8    High           None             Fixed(1)       15.6rtu0 15.6u0-1
+122xxxx  2024-xxxxx  scsi             7.0    Medim          trivial          Fixed(11)      12.5u50-54 15.4u20-26 15.5rtu7-15 15.5u7-14
 ...
 ...
 ```
