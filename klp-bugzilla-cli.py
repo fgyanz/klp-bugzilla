@@ -36,7 +36,7 @@ def fetch_bugs():
     bugs = bzapi.getbugs(ids)
 
     deps_ids = [b.depends_on[0] for b in bugs if len(b.depends_on) > 0]
-    deps_fields = ["assigned_to", "whiteboard"]
+    deps_fields = ["status", "assigned_to", "whiteboard"]
     deps = {d.id:d for d in bzapi.getbugs(deps_ids,include_fields=deps_fields)}
 
     return bugs, deps
@@ -50,7 +50,10 @@ def check_status(bug, cve, dep):
     - Incomplete: Probably someone is working on the bug.
     - Not-Fixed: Probably no one has started working yet on the bug OR
       it has been discarded.
+    - Dropped: Bug has been discarded with 100% certainty.
     '''
+    if "WONTFIX" in dep.status:
+        return "Dropped", affected
 
     ret = subprocess.run(['klp-build', "scan", "--cve", cve],
                          stdout=subprocess.PIPE,

@@ -36,7 +36,9 @@ the `status` and `affected` ones.
 * status:
   * `Fixed(n)`: Bug has been fixed in all the vulnerable SLEs.
   * `Incomplete(n)`: Most likely someone is working on the bug.
-  * `Not-Fixed`: No one has started working on the bug yet. OR it has been discarded.
+  * `Not-Fixed`: No one has started working on the bug yet. Or the bug has been discarded,
+                 but it cannot be confirmed with klp-bugzilla alone.
+  * `Dropped`: Bug has been discarded with 100% certainty, so no livepatch needed.
 
 `n` is the total number of commits fixing the bug. 
 
