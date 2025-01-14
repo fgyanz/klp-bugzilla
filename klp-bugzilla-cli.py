@@ -52,7 +52,7 @@ def check_status(bug, cve, dep):
       it has been discarded.
     - Dropped: Bug has been discarded with 100% certainty.
     '''
-    if "WONTFIX" in dep.status:
+    if "WONTFIX" in dep.status or "INVALID" in dep.status:
         return "Dropped", affected
 
     ret = subprocess.run(['klp-build', "scan", "--cve", cve],
