@@ -36,13 +36,14 @@ def fetch_bugs():
     bugs = bzapi.getbugs(ids)
 
     deps_ids = [b.depends_on[0] for b in bugs if len(b.depends_on) > 0]
-    deps_fields = ["status", "assigned_to", "whiteboard"]
+    deps_fields = ["status", "resolution", "assigned_to", "whiteboard"]
     deps = {d.id:d for d in bzapi.getbugs(deps_ids,include_fields=deps_fields)}
 
     return bugs, deps
 
 def check_status(bug, cve, dep):
     affected = "No"
+    status = "Not-Fixed"
 
     '''
     status types:
@@ -52,8 +53,8 @@ def check_status(bug, cve, dep):
       it has been discarded.
     - Dropped: Bug has been discarded with 100% certainty.
     '''
-    if "WONTFIX" in dep.status or "INVALID" in dep.status:
-        return "Dropped", affected
+    if dep and dep.resolution and dep.resolution in {"INVALID", "WONTFIX", "DUPLICATED"}:
+        status = "Dropped"
 
     ret = subprocess.run(['klp-build', "scan", "--cve", cve],
                          stdout=subprocess.PIPE,
@@ -68,7 +69,8 @@ def check_status(bug, cve, dep):
     # Number of unique commits fixing the bug.
     # Worst case, there are several unique commits per SLE.
     ncommits = len(set(re.findall(r'[a-z0-9]{40}', ret.stdout)))
-    status = f"Fixed({ncommits})" if ncommits else "Not-Fixed"
+    if ncommits:
+        status = f"Fixed({ncommits})"
 
     report = re.findall(r'[A-Za-z0-9\-\t .]+$', ret.stderr)[0]
     if "All supported codestreams are already patched" not in report:
