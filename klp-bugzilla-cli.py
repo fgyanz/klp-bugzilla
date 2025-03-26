@@ -63,12 +63,13 @@ def check_status(bug, cve, dep):
     if ret.returncode:
         sys.exit(f"Unexpected klp-build error:\n{ret.stderr}")
 
-    if "Upstream\nNone" in ret.stdout:
+    if "Upstream\nNone" in ret.stderr:
         return "Not-Upstream", ""
 
     # Number of unique commits fixing the bug.
     # Worst case, there are several unique commits per SLE.
-    ncommits = len(set(re.findall(r'[a-z0-9]{40}', ret.stdout)))
+
+    ncommits = len(set(re.findall(r'[a-z0-9]{40}', ret.stderr)))
     if ncommits:
         status = f"Fixed({ncommits})"
 
