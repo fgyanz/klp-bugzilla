@@ -27,7 +27,7 @@ def fetch_bugs():
     print(f"[+] Downloading bugs...")
 
     query = bzapi.build_query(
-            status="NEW",
+            status=["NEW","REOPENED","IN_PROGRESS"],
             component="Kernel Live Patches",
             assigned_to="kernel-lp")
 
