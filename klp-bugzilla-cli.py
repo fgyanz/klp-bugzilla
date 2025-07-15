@@ -90,7 +90,7 @@ def check_classification(bug):
         try:
             comments = bug.getcomments()
             break
-        except (BugzillaError, RequestException):
+        except:
            # There's a max number of allowed simultaneous requests...
             time.sleep(5)
 
