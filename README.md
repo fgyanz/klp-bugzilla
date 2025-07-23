@@ -11,7 +11,7 @@ Make sure it is correctly installed and configured.
 klp-bugzilla is pretty straightforward and does not require any kind of configuration. 
 The current version does not support commandline options, but that might change in the future.
 Beware that klp-bugzilla is a multi-threaded program, and it will use all available cores to
-speed up the analysis. For a batch of 111 bugs and 16 threads, it takes roughly 35 minutes to
+speed up the analysis. For a batch of 111 bugs and 16 threads, it takes roughly 5 minutes to
 process everything.
 ```
 $ ./klp-bugzilla-cli.py
@@ -40,7 +40,7 @@ the `status` and `affected` ones.
                  but it cannot be confirmed with klp-bugzilla alone.
   * `Dropped`: Bug has been discarded with 100% certainty, so no livepatch needed.
 
-`n` is the total number of commits fixing the bug. 
+`n` is the total number of backports for this specific CVE.
 
 NOTE: The `status` is derived from the available information in bugzilla, and as such
 it might be incorrect and should be manually verified. That being said, in most cases

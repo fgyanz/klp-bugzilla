@@ -66,12 +66,11 @@ def check_status(bug, cve, dep):
     if "Upstream\nNone" in ret.stderr:
         return "Not-Upstream", ""
 
-    # Number of unique commits fixing the bug.
-    # Worst case, there are several unique commits per SLE.
+    # Number of unique patches fixing the bug.
 
-    ncommits = len(set(re.findall(r'[a-z0-9]{40}', ret.stderr)))
-    if ncommits:
-        status = f"Fixed({ncommits})"
+    npatches = len(set(re.findall(r'patches.suse/.*\.patch', ret.stderr)))
+    if npatches:
+        status = f"Fixed({npatches})"
 
     report = re.findall(r'[A-Za-z0-9\-\t .]+$', ret.stderr)[0]
     if "All supported codestreams are already patched" not in report:
@@ -79,7 +78,7 @@ def check_status(bug, cve, dep):
         affected = report[1:]
 
     if dep and "security-team" not in dep.assigned_to:
-        status = f"Incomplete({ncommits})"
+        status = f"Incomplete({npatches})"
 
     return status, affected
 
